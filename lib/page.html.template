@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+<!-- 
+Copyright 2014-2015 the project authors as listed in the AUTHORS file.
+All rights reserved. Use of this source code is governed by the
+license that can be found in the LICENSE file.
+-->
+
+<html>
+   <head>
+
+   <title><ALARM DASHBOARD TITLE></title>
+
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+   <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
+   <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+   <script src="/socket.io/socket.io.js"></script>
+
+   <style>
+      header {
+         border: 1px solid grey;
+         padding: 3px;
+         background-color:green;
+         color:black;
+         width:347px;
+         font-size:20px;
+         text-align:center;
+      }
+
+      side {
+         border: 1px solid grey;
+         background-color:#eeeeee;
+         width:100px;
+         //height:280px;
+         height: 100%;
+         float:left;
+         padding: 0px;
+      }
+
+      .button_class {
+         background: #3498db;
+         background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+         background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+         background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+         background-image: -o-linear-gradient(top, #3498db, #2980b9);
+         background-image: linear-gradient(to bottom, #3498db, #2980b9);
+         -webkit-border-radius: 25;
+         -moz-border-radius: 25;
+         border-radius: 25px;
+         font-family: Arial;
+         color: #ffffff;
+         font-size: 15px;
+         width: 85px;
+         height: 20px;
+         padding: 0;
+         margin-top: 0px;
+         margin-bottom: 0px;
+         margin-left: auto;
+         margin-right: auto;
+         display: block;
+         float: none;
+         text-align:center;
+         vertical-align: middle;
+         line-height: 20px;
+         text-decoration: none;
+      }
+
+      .button_class:hover {
+         background: #3cb0fd;
+         background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+         background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+         background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+         background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+         background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+         text-decoration: none;
+      }
+   
+      .picture_button_class {
+         font-size: 10px;
+      }
+
+      .picture_button_class:hover {
+         font-size: 10px;
+      }
+
+      .log_data_class {
+         font-size: 10px;
+         width:320px;
+      }
+
+      zones {
+         width: 250px;
+         //height: 280px;
+         height: 100%;
+         float: left;
+         background-color: #eeeeee;
+         border: 1px solid grey;
+         padding: 0px;
+      }
+   </style>
+
+   <script>
+      var pictures = null;
+      var currentView = 1;
+      var currentlyDisplayedPicture = null;
+      var alarmState = "disarmed";
+      var zonePrefix = 'house/alarm/zone';
+      var socket; 
+      var connect = function() {
+         try {
+            pictures = new Array(4);
+            var picture1 = document.getElementById('picture1')
+            var picture2 = document.getElementById('picture2')
+            var picture3 = document.getElementById('picture3')
+            var picture4 = document.getElementById('picture4')
+            picture1.innerHTML = '';
+            picture2.innerHTML = '';
+            picture3.innerHTML = '';
+            picture4.innerHTML = '';
+            picture1.classList.remove('button_class');
+            picture2.classList.remove('button_class');
+            picture3.classList.remove('button_class');
+            picture4.classList.remove('button_class');
+
+         } catch (err) {
+         }
+
+         socket = new io.connect('<URL_TYPE>://' + window.location.host);
+         socket.on('message', function(event) {
+            var parts = event.split(":");
+            var topic = parts[0];
+            var value = parts[1];
+            console.log("topic:" + topic);
+            console.log("value:" + value);
+
+            if ("house/alarm/status" == topic) {
+               var targetTD = document.getElementById(topic);
+               var armdisarm = document.getElementById("arm-disarm");
+               if ("disarm" == value) { 
+                  targetTD.style.background = 'green';
+                  targetTD.innerHTML = "---- Disarmed ----</H3>";
+                  alarmState = "disarmed";
+                  armdisarm.innerHTML = "arm";
+               } else if ("arm" == value) {
+                  targetTD.style.background = 'yellow';
+                  targetTD.innerHTML = "---- Armed ----</H3>";
+                  armdisarm.innerHTML = "disarm";
+                  alarmState = "armed";
+               } else {
+                  targetTD.style.background = 'red';
+                  targetTD.innerHTML = "---- ALARM ACTIVATED ----</H3>";
+               }
+            } else if ('house/camera/newpicture' == topic) {
+               stopPictureInFlightIndicator();
+               if (value != '') {
+                  var picture1 = document.getElementById('picture1');
+                  var picture2 = document.getElementById('picture2');
+                  var picture3 = document.getElementById('picture3');
+                  var picture4 = document.getElementById('picture4');
+		  pictures[3] = pictures[2];
+                  pictures[2] = pictures[1];
+                  pictures[1] = pictures[0];
+                  pictures[0] = value;
+
+
+                  if (pictures[3]!= undefined) {
+                     picture4.innerHTML = picture3.innerHTML;
+                     picture4.onclick = function() { showPicture(3); };
+                     picture4.classList.add('button_class', 'picture_button_class');
+                  }
+                  if (pictures[2]!= undefined) {
+                     picture3.innerHTML = picture2.innerHTML;
+                     picture3.onclick = function() { showPicture(2); };
+                     picture3.classList.add('button_class', 'picture_button_class');
+                  }
+                  if (pictures[1]!= undefined) {
+                     picture2.innerHTML = picture1.innerHTML;
+                     picture2.onclick = function() { showPicture(1); };
+                     picture2.classList.add('button_class', 'picture_button_class');
+                  }
+                  picture1.innerHTML = value;
+                  picture1.classList.add('button_class', 'picture_button_class');
+                  picture1.onclick = function() { showPicture(0); };
+               }
+            } else if (topic.substring(0, zonePrefix.length) === zonePrefix) {
+               var targetTD = document.getElementById(topic);
+               if(topic.indexOf("status") > -1) {
+                  if ("off" == value) { 
+                     targetTD.style.background = 'green';
+                  } else if ("on" == value) {
+                     targetTD.style.background = 'red';
+                  }
+               } else if (topic.indexOf("name") > -1) { 
+                  targetTD.innerHTML = value;
+               }
+            }
+         });
+      }
+
+      function toggleAlarmState() {
+console.log('toggling alarm status');
+         var armdisarm = document.getElementById("arm-disarm");
+         if ("disarmed" == alarmState) { 
+            socket.emit('message', 'house/alarm/status' + ':arm');
+         } else { 
+            socket.emit('message', 'house/alarm/status' + ':disarm');
+         }
+      }
+
+      var pictureInFlight = undefined;
+      var pictureInFlightState = 0;
+      function stopPictureInFlightIndicator() {
+         var indicator = document.getElementById('take-picture');
+         pictureInFlightState = 0;
+         indicator.innerHTML="picture";
+         if (pictureInFlight !== undefined) {
+            clearInterval(pictureInFlight);
+         }
+      }
+
+      function takePicture() {
+         socket.emit('message', 'house/camera/capture' + ':take');
+         var indicator = document.getElementById('take-picture');
+         pictureInFlight = setInterval(function() {
+            if (pictureInFlightState === 0) {
+               pictureInFlightState = 1;
+               indicator.innerHTML="";
+            } else {
+               pictureInFlightState = 0;
+               indicator.innerHTML="picture";
+            }
+         },1000);
+      }
+
+      function prepareDialogs() {
+         imageDialog = $('#displayPictures');
+         imageDialog.dialog({
+            width: '95%', 
+            autoOpen: false,
+            position: { my: "top" },
+            buttons: [
+               {
+                  text: "1",
+                  click: function() {
+                     showView(1);
+                  }
+               },
+               {
+                  text: "2",
+                  click: function() {
+                     showView(2);
+                  }
+               },
+               {
+                  text: "3",
+                  click: function() {
+                     showView(3);
+                  }
+               },
+               {
+                  text: "4",
+                  click: function() {
+                     showView(4);
+                  }
+               },
+               {
+                  text: "next",
+                  click: function() {
+                     showNextPicture();
+                  }
+               },
+               {
+                  text: "close",
+                  click: function() {
+                     $( this ).dialog( "close" );
+                  }
+               }
+            ]
+         });
+         $(".ui-dialog-titlebar").hide();
+         $(".ui-button-text").css("font-size", "10px");
+         $(".ui-dialog-buttonpane").css({"padding":".1em .1em .1em 0","margin":"0 0 0 0"} );
+         $("button").css({"padding":"0 .2em 0 .2em","margin":"0 .5em 0 0"} );
+
+         $('#displayLog').dialog({
+           autoOpen: false,
+           width: '95%', 
+           position: { my: "top" },
+           buttons: [
+              {
+                 text: "close",
+                 click: function() {
+                    $( this ).dialog( "close" );
+                 }
+              }
+           ]
+	 });
+         $(".ui-dialog-titlebar").hide();
+         $(".ui-button-text").css("font-size", "10px");
+         $(".ui-dialog-buttonpane").css({"padding":".1em .1em .1em 0","margin":"0 0 0 0"} );
+         $("button").css({"padding":"0 .2em 0 .2em","margin":"0 .5em 0 0"} );
+      }
+
+      function showPicture(index) {
+         var url = '<WEBSERVER_URL>/pictures/' + getViewQualifier() + pictures[index];
+         currentlyDisplayedPicture = index;
+         var imageDialog = $('#displayPictures');
+         var imageTag = $('#displayPictures-image');
+         imageTag.attr('onload', function() { imageDialog.dialog("open"); });
+         imageTag.attr('src', url);
+      }
+
+      function getViewQualifier() {
+         var viewQualifier = '';
+         if (currentView != 1) {
+            viewQualifier = currentView + '-';
+         }
+         return viewQualifier;
+      }
+
+      function showView(view) {
+         if (currentView === view) {
+               return;
+         } else {
+            currentView = view;
+            var viewDisplay = document.getElementById('currentView');
+            viewDisplay.innerHTML = currentView;
+            var url = '<WEBSERVER_URL>/pictures/' + getViewQualifier()
+                                                  + pictures[currentlyDisplayedPicture];
+            imageTag = $('#displayPictures-image');
+            imageTag.attr('src', url);
+            return;
+         }
+      }
+
+      function showNextPicture() {
+         var pictureToDisplay = currentlyDisplayedPicture;
+         while(true) { 
+            pictureToDisplay++;
+            if (pictureToDisplay > 3) {
+               pictureToDisplay = 0;
+            }
+            if (pictureToDisplay == currentlyDisplayedPicture) {
+               break;
+            } else if (pictures[pictureToDisplay] != undefined) {
+               currentlyDisplayedPicture = pictureToDisplay;
+               var url = '<WEBSERVER_URL>/pictures/' + getViewQualifier() + pictures[currentlyDisplayedPicture];
+               imageTag = $('#displayPictures-image');
+               imageTag.attr('src', url);
+               break;
+            }
+         }
+      }
+
+      function showLog() {
+         var logDialog = $('#displayLog');
+         var logData = document.getElementById('logData');
+         var httpRequest = new XMLHttpRequest();
+         httpRequest.onload = function() {
+            logData.innerHTML = '<pre>' + httpRequest.responseText + '</pre>';
+            logDialog.dialog("open");
+         }
+         httpRequest.open("GET", "getlog", true);
+         httpRequest.send();
+      }
+ 
+      $( document ).ready(function() {
+         prepareDialogs();
+         connect();
+      });
+
+   </script>
+
+   </head>
+
+   <body>
+      <div id="displayPictures" >
+         <div id="currentView">1</div>
+         <img id="displayPictures-image" src="" width="100%" />
+      </div>
+      <div id="displayLog" >
+         <div id="logData" class=log_data_class></div>
+      </div>
+
+      <header id="house/alarm/status">
+      ---- Disarmed ----
+      </header>
+
+   <both>
+   <side>
+      <table width="100%", height="100%" style="font-size:20px">
+         <tr>
+            <td>&nbsp;</td><td><arm_disarm class=button_class onclick="toggleAlarmState();" width="100%" id="arm-disarm">arm</arm_disarm></td>
+         </tr>
+         <tr>
+            <td>&nbsp;</td><td><take_picture class=button_class onclick="takePicture();" width="100%" id="take-picture">picture</take_picutre></td>
+         </tr>
+         <tr><td>&nbsp;</td><td><div id="pending" width="100%" >&nbsp;</div></td></tr>
+         <tr><td>&nbsp;</td><td><div id="picture1" width="100%" >&nbsp;</div></td></tr>
+         <tr><td>&nbsp;</td><td><div id="picture2" width="100%" >&nbsp;</div></td></tr>
+         <tr><td>&nbsp;</td><td><div id="picture3" width="100%" >&nbsp;</div></td></tr>
+         <tr><td>&nbsp;</td><td><div id="picture4" width="100%" &nbsp;</div></td></tr>
+         <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+         <tr><td>&nbsp;</td><td><show_log class=button_class onclick="showLog();" width="100%" id="showLog">showLog</show_log></td></tr> 
+      </table>
+   </side>
+
+   <zones>
+      <table width="100%" style="font-size:20px">
+         <tbody>
+            <tr><td align="center" colspan="2"><B>ZONES</B></td></tr>
+            <tr><td id="house/alarm/zone/1/name">zone1</td> <td id="house/alarm/zone/1/status", width=50%, bgcolor = 'green'></td></tr>
+            <tr><td id="house/alarm/zone/2/name">zone2</td> <td id="house/alarm/zone/2/status", width=50%, bgcolor = 'green'></td></tr>
+            <tr><td id="house/alarm/zone/3/name">zone3</td> <td id="house/alarm/zone/3/status", width=50%, bgcolor = 'green'></td></tr>
+            <tr><td id="house/alarm/zone/4/name">zone4</td> <td id="house/alarm/zone/4/status", width=50%, bgcolor = 'green'></td></tr>
+            <tr><td id="house/alarm/zone/5/name">zone5</td> <td id="house/alarm/zone/5/status", width=50%, bgcolor = 'green'></td></tr>
+            <tr><td id="house/alarm/zone/6/name">zone6</td> <td id="house/alarm/zone/6/status", width=50%, bgcolor = 'green'></td></tr>
+            <tr><td id="house/alarm/zone/7/name">zone7</td> <td id="house/alarm/zone/7/status", width=50%, bgcolor = 'green'></td></tr>
+            <tr><td id="house/alarm/zone/8/name">zone8</td> <td id="house/alarm/zone/8/status", width=50%, bgcolor = 'green'></td></tr>
+         </tbody>
+      </table>
+   </zones>
+   </both>
+   </body>
+
+</html>
