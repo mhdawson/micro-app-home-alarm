@@ -13,7 +13,7 @@ MQTT. It provides a GUI that allows you to:
 When the alarm is triggered it will take pictures every 10 second for 5 minutes, pushing them to a remote webserver.
 It can also be configured to send sms messages to notify the owner than an alarm has occured
 
-![picture of alarm main window](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/alarm_main_window.jpg?raw=true)
+![picture of alarm main window](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/pictures/alarm_main_window.jpg?raw=true)
 
 The following projects can be used to connect sensors such
 motion detectors, door contacts and webcams.
@@ -22,12 +22,12 @@ motion detectors, door contacts and webcams.
 
 Additional views when alarm is active and triggered
 
-![picture of alarm when armed](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/alarm_main_window_armed.jpg?raw=true)
-![picture of alarm when triggered](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/alarm_main_window_triggered.jpg?raw=true)
+![picture of alarm when armed](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/pictures/alarm_main_window_armed.jpg?raw=true)
+![picture of alarm when triggered](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/pictures/alarm_main_window_triggered.jpg?raw=true)
 
 View when using GUI to display pictures taken by camera
 
-![sample camera picture view](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/alarm_camera_picture_view.jpg?raw=true)
+![sample camera picture view](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/pictures/alarm_camera_picture_view.jpg?raw=true)
 
 The server requires Node along with the moduiles defined in the package.json
 file to be installed.
