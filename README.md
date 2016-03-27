@@ -29,7 +29,7 @@ View when using GUI to display pictures taken by camera
 
 ![sample camera picture view](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/pictures/alarm_camera_picture_view.jpg?raw=true)
 
-The server requires Node along with the moduiles defined in the package.json
+The server requires Node along with the modules defined in the package.json
 file to be installed.
  
 It also requires:
@@ -47,7 +47,7 @@ following configuration options:
 * alarmSite - Name assigned to this instance of the alarm
 * serverPort - port on which alarm GUI is server
 * tls - set to the string "true" if you want to force tls when connecting
-* authenticate - set to "true to enable basic authentication". If set 
+* authenticate - set to "true" to enable basic authentication. If set
   to true then you must provide the "authInfo" values described below
 * scrollBars - set this to "true" so that you can scroll when viweing the log
   file
@@ -55,16 +55,18 @@ following configuration options:
   the hashed password that will be used to authenticate to the micro-app.
   This can be generated with the utility in the micro-app framework which
   is called: .../node_modules/micro-app-framework/lib/gen_password.js.
-  The first parameter is the password to be hashed. 
+  The first parameter is the password to be hashed.
 * mqtt - object with serverUrl, rootTopic and certsDir.  If the serverUrl
   uses tls (ex mqtts: then certsDir must contain the required certificates
-  etc needed to connect to the mqtt server using tls)
-* zone - array objects each of which specifies the topic, zoneId and label
+  etc. needed to connect to the mqtt server using tls)
+* zone - array objects, each of which specifies the topic, zoneId and label
   for one of the alarm zones
 * twilio - object specifying the accountSID, accountAuthToken, fromNumber 
   and toNumber that will be used to send SMS notifications
-* camera - object with topic used to community with the camera server
-  and topics to community with IR illuminator
+* camera - object with topic used to communicate with the camera server
+  and topics and messages used to communicate with an IR illuminator (see
+  https://github.com/mhdawson/PI433WirelessTXManager for the circuit
+  used to turn on/off the power supply for the IR illuminator)
 * eventLogPrefix - directory in which log for alarm will be written
 
 For example this is my configuration file with some key elements
@@ -111,6 +113,14 @@ npm install micro-app-home-alarm
 
 and then configure the default config.json file in the lib directory as described
 in the configuration section above.
+
+# Running
+
+Simply cd to the directory where the npm was install and type:
+
+<PRE>
+npm start
+</PRE>
 
 ## TODOs
 - Add more doc on how to configure, setup and run, including the required mqtt server
