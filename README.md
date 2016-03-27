@@ -1,2 +1,117 @@
-# micro-app-home-alarm
-Node.js base Home Alarm controller
+# MQTT/Node base home alarm system
+
+This projects provides a home based alarm system using Node and
+MQTT. It provides a GUI that allows you to:
+
+* arm/disarm the alarm
+* see the status of the zones
+* ask that a picture be taken
+* view the last 4 pictures taken
+* view pictures from multiple cameras
+* view the log of alarm events
+
+When the alarm is triggered it will take pictures every 10 second for 5 minutes, pushing them to a remote webserver.
+It can also be configured to send sms messages to notify the owner than an alarm has occured
+
+![picture of alarm main window](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/alarm_main_window.jpg?raw=true)
+
+The following projects can be used to connect sensors such
+motion detectors, door contacts and webcams.
+* [PI433WirelessRecvMananager](https://github.com/mhdawson/PI433WirelessRecvManager)
+* [PIWebcamServer](https://github.com/mhdawson/PIWebcamServer)
+
+Additional views when alarm is active and triggered
+
+![picture of alarm when armed](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/alarm_main_window_armed.jpg?raw=true)
+![picture of alarm when triggered](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/alarm_main_window_triggered.jpg?raw=true)
+
+View when using GUI to display pictures taken by camera
+
+![sample camera picture view](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/alarm_camera_picture_view.jpg?raw=true)
+
+The server requires Node along with the moduiles defined in the package.json
+file to be installed.
+ 
+It also requires:
+
+* an mqtt server 
+* a remote webserver to serve up the pictures taken
+* twillio account (If you want SMS notifications)
+
+# Configuration
+
+Most configuration is done in the config.json file which supports the
+following configuration options:
+
+* title - title used to name the page for the app
+* alarmSite - Name assigned to this instance of the alarm
+* serverPort - port on which alarm GUI is server
+* tls - set to the string "true" if you want to force tls when connecting
+* authenticate - set to "true to enable basic authentication". If set 
+  to true then you must provide the "authInfo" values described below
+* scrollBars - set this to "true" so that you can scroll when viweing the log
+  file
+* authInfo - object with username, password and realm values. authInfo.password is
+  the hashed password that will be used to authenticate to the micro-app.
+  This can be generated with the utility in the micro-app framework which
+  is called: .../node_modules/micro-app-framework/lib/gen_password.js.
+  The first parameter is the password to be hashed. 
+* mqtt - object with serverUrl, rootTopic and certsDir.  If the serverUrl
+  uses tls (ex mqtts: then certsDir must contain the required certificates
+  etc needed to connect to the mqtt server using tls)
+* zone - array objects each of which specifies the topic, zoneId and label
+  for one of the alarm zones
+* twilio - object specifying the accountSID, accountAuthToken, fromNumber 
+  and toNumber that will be used to send SMS notifications
+* camera - object with topic used to community with the camera server
+  and topics to community with IR illuminator
+* eventLogPrefix - directory in which log for alarm will be written
+
+For example this is my configuration file with some key elements
+masked out:
+
+<PRE>
+{
+  "title": "Cottage Alarm",
+  "alarmSite": "Home",
+  "serverPort": 3000,
+  "tls": "true",
+  "authenticate": "true",
+  "scrollBars": true,
+  "authInfo": {"username": "alarm", "password": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "realm": "alarm"},
+  "mqtt": { "serverUrl": "mqtts:XXXXXXXXX:8883",
+            "rootTopic": "house",
+            "certsDir": "./certs" },
+  "webserverUrlForPictures": "https:XXXXXXXXXX:XXXXX",
+  "zones": [ { "topic": "house/2262/1", "zoneId": 3, "label": "front door" },
+             { "topic": "house/2262/2", "zoneId": 4, "label": "patio door" },
+             { "topic": "house/2262/3", "zoneId": 2, "label": "motion living" },
+             { "topic": "house/2262/4", "zoneId": 1, "label": "motion hall" },
+             { "topic": "house/2262/5", "zoneId": 5, "label": "fire" }
+           ],
+  "twilio": { "accountSID": "XXXXXXXXXXXXXXXXXXXXXXX",
+              "accountAuthToken": "XXXXXXXXXXXXXXXXXXXX",
+              "fromNumber": "XXXXXXXXXX",
+              "toNumber": "XXXXXXXXXXX" },
+  "camera": { "topic": "house/camera",
+              "IRtopic": "home/2272",
+              "IRon": "FFFFFFF11000",
+              "IRoff": "FFFFFFF10000" },
+  "eventLogPrefix": "/home/user1/repos/micro-app-home-alarm"
+}
+</PRE>
+
+# Installation
+
+The easiest way to install is to run:
+
+<PRE>
+npm install micro-app-home-alarm
+</PRE>
+
+and then configure the default config.json file in the lib directory as described
+in the configuration section above.
+
+## TODOs
+- Add more doc on how to configure, setup and run, including the required mqtt server
+
