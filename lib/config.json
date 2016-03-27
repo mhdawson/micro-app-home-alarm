@@ -1,0 +1,28 @@
+{
+  "title": "Cottage Alarm",
+  "alarmSite": "Home",
+  "serverPort": 3000,
+  "tls": "true",
+  "authenticate": "true",
+  "scrollBars": true,
+  "authInfo": {"username": "alarm", "password": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "realm": "alarm"},
+  "mqtt": { "serverUrl": "mqtts:XXXXXXXXX:8883",
+            "rootTopic": "house",
+            "certsDir": "./certs" },
+  "webserverUrlForPictures": "https:XXXXXXXXXX:XXXXX",
+  "zones": [ { "topic": "house/2262/1", "zoneId": 3, "label": "front door" },
+             { "topic": "house/2262/2", "zoneId": 4, "label": "patio door" },
+             { "topic": "house/2262/3", "zoneId": 2, "label": "motion living" },
+             { "topic": "house/2262/4", "zoneId": 1, "label": "motion hall" },
+             { "topic": "house/2262/5", "zoneId": 5, "label": "fire" }
+           ],
+  "twilio": { "accountSID": "XXXXXXXXXXXXXXXXXXXXXXX",
+              "accountAuthToken": "XXXXXXXXXXXXXXXXXXXX",
+              "fromNumber": "XXXXXXXXXX",
+              "toNumber": "XXXXXXXXXXX" },
+  "camera": { "topic": "house/camera",
+              "IRtopic": "home/2272",
+              "IRon": "FFFFFFF11000",
+              "IRoff": "FFFFFFF10000" },
+  "eventLogPrefix": "/home/user1/repos/micro-app-home-alarm"
+}
