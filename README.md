@@ -1,5 +1,12 @@
 # MQTT/Node base home alarm system
 
+This is a port of the [HomeAlarm](https://github.com/mhdawson/HomeAlarm) project
+over to the micro-app framwork so that you can get the native
+look and feel on desktop and mobile devices with the
+[micro-app-cordova-launcher](https://github.com/mhdawson/micro-app-cordova-launcher)
+and [micro-app-electron-launcher](https://github.com/mhdawson/micro-app-electron-launcher)
+projects.
+
 This projects provides a home based alarm system using Node and
 MQTT. It provides a GUI that allows you to:
 
@@ -11,9 +18,15 @@ MQTT. It provides a GUI that allows you to:
 * view the log of alarm events
 
 When the alarm is triggered it will take pictures every 10 second for 5 minutes, pushing them to a remote webserver.
-It can also be configured to send sms messages to notify the owner than an alarm has occured
+It can also be configured to send sms messages to notify the owner than an alarm has occured.
+
+In a browser:
 
 ![picture of alarm main window](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/pictures/alarm_main_window.jpg?raw=true)
+
+On a phone:
+
+![picture of alarm main window on phone](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/pictures/alarm_main_window_phone.jpg?raw=true)
 
 The following projects can be used to connect sensors such
 motion detectors, door contacts and webcams.
