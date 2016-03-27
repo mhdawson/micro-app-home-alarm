@@ -22,16 +22,16 @@ license that can be found in the LICENSE file.
          padding: 3px;
          background-color:green;
          color:black;
-         width:347px;
+         width:346px;
          font-size:20px;
          text-align:center;
+         margin: 0 auto;
       }
 
       side {
          border: 1px solid grey;
          background-color:#eeeeee;
          width:100px;
-         //height:280px;
          height: 100%;
          float:left;
          padding: 0px;
@@ -198,7 +198,6 @@ license that can be found in the LICENSE file.
       }
 
       function toggleAlarmState() {
-console.log('toggling alarm status');
          var armdisarm = document.getElementById("arm-disarm");
          if ("disarmed" == alarmState) { 
             socket.emit('message', 'house/alarm/status' + ':arm');
@@ -382,45 +381,50 @@ console.log('toggling alarm status');
          <div id="logData" class=log_data_class></div>
       </div>
 
-      <header id="house/alarm/status">
+      <header align="center" id="house/alarm/status">
       ---- Disarmed ----
       </header>
 
-   <both>
-   <side>
-      <table width="100%", height="100%" style="font-size:20px">
+      <table align="center" border="0px" cellpadding="0px" cellspacing="0px">
          <tr>
-            <td>&nbsp;</td><td><arm_disarm class=button_class onclick="toggleAlarmState();" width="100%" id="arm-disarm">arm</arm_disarm></td>
-         </tr>
-         <tr>
-            <td>&nbsp;</td><td><take_picture class=button_class onclick="takePicture();" width="100%" id="take-picture">picture</take_picutre></td>
-         </tr>
-         <tr><td>&nbsp;</td><td><div id="pending" width="100%" >&nbsp;</div></td></tr>
-         <tr><td>&nbsp;</td><td><div id="picture1" width="100%" >&nbsp;</div></td></tr>
-         <tr><td>&nbsp;</td><td><div id="picture2" width="100%" >&nbsp;</div></td></tr>
-         <tr><td>&nbsp;</td><td><div id="picture3" width="100%" >&nbsp;</div></td></tr>
-         <tr><td>&nbsp;</td><td><div id="picture4" width="100%" &nbsp;</div></td></tr>
-         <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-         <tr><td>&nbsp;</td><td><show_log class=button_class onclick="showLog();" width="100%" id="showLog">showLog</show_log></td></tr> 
-      </table>
-   </side>
-
-   <zones>
-      <table width="100%" style="font-size:20px">
-         <tbody>
-            <tr><td align="center" colspan="2"><B>ZONES</B></td></tr>
-            <tr><td id="house/alarm/zone/1/name">zone1</td> <td id="house/alarm/zone/1/status", width=50%, bgcolor = 'green'></td></tr>
-            <tr><td id="house/alarm/zone/2/name">zone2</td> <td id="house/alarm/zone/2/status", width=50%, bgcolor = 'green'></td></tr>
-            <tr><td id="house/alarm/zone/3/name">zone3</td> <td id="house/alarm/zone/3/status", width=50%, bgcolor = 'green'></td></tr>
-            <tr><td id="house/alarm/zone/4/name">zone4</td> <td id="house/alarm/zone/4/status", width=50%, bgcolor = 'green'></td></tr>
-            <tr><td id="house/alarm/zone/5/name">zone5</td> <td id="house/alarm/zone/5/status", width=50%, bgcolor = 'green'></td></tr>
-            <tr><td id="house/alarm/zone/6/name">zone6</td> <td id="house/alarm/zone/6/status", width=50%, bgcolor = 'green'></td></tr>
-            <tr><td id="house/alarm/zone/7/name">zone7</td> <td id="house/alarm/zone/7/status", width=50%, bgcolor = 'green'></td></tr>
-            <tr><td id="house/alarm/zone/8/name">zone8</td> <td id="house/alarm/zone/8/status", width=50%, bgcolor = 'green'></td></tr>
-         </tbody>
-      </table>
-   </zones>
-   </both>
+            <td align="center">
+              <side>
+                 <table width="100%", height="100%" style="font-size:20px">
+                    <tr>
+                       <td>&nbsp;</td><td><arm_disarm class=button_class onclick="toggleAlarmState();" width="100%" id="arm-disarm">arm</arm_disarm></td>
+                    </tr>
+                    <tr>
+                       <td>&nbsp;</td><td><take_picture class=button_class onclick="takePicture();" width="100%" id="take-picture">picture</take_picutre></td>
+                    </tr>
+                    <tr><td>&nbsp;</td><td><div id="pending" width="100%" >&nbsp;</div></td></tr>
+                    <tr><td>&nbsp;</td><td><div id="picture1" width="100%" >&nbsp;</div></td></tr>
+                    <tr><td>&nbsp;</td><td><div id="picture2" width="100%" >&nbsp;</div></td></tr>
+                    <tr><td>&nbsp;</td><td><div id="picture3" width="100%" >&nbsp;</div></td></tr>
+                    <tr><td>&nbsp;</td><td><div id="picture4" width="100%" &nbsp;</div></td></tr>
+                    <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    <tr><td>&nbsp;</td><td><show_log class=button_class onclick="showLog();" width="100%" id="showLog">showLog</show_log></td></tr> 
+                 </table>
+              </side>
+           </td>
+           <td>
+              <zones>
+                 <table width="100%" style="font-size:20px">
+                    <tbody>
+                       <tr><td align="center" colspan="2"><B>ZONES</B></td></tr>
+                       <tr><td id="house/alarm/zone/1/name">zone1</td> <td id="house/alarm/zone/1/status", width=50%, bgcolor = 'green'></td></tr>
+                       <tr><td id="house/alarm/zone/2/name">zone2</td> <td id="house/alarm/zone/2/status", width=50%, bgcolor = 'green'></td></tr>
+                       <tr><td id="house/alarm/zone/3/name">zone3</td> <td id="house/alarm/zone/3/status", width=50%, bgcolor = 'green'></td></tr>
+                       <tr><td id="house/alarm/zone/4/name">zone4</td> <td id="house/alarm/zone/4/status", width=50%, bgcolor = 'green'></td></tr>
+                       <tr><td id="house/alarm/zone/5/name">zone5</td> <td id="house/alarm/zone/5/status", width=50%, bgcolor = 'green'></td></tr>
+                       <tr><td id="house/alarm/zone/6/name">zone6</td> <td id="house/alarm/zone/6/status", width=50%, bgcolor = 'green'></td></tr>
+                       <tr><td id="house/alarm/zone/7/name">zone7</td> <td id="house/alarm/zone/7/status", width=50%, bgcolor = 'green'></td></tr>
+                       <tr><td id="house/alarm/zone/8/name">zone8</td> <td id="house/alarm/zone/8/status", width=50%, bgcolor = 'green'></td></tr>
+                    </tbody>
+                 </table>
+              </zones>
+           </td>
+        </tr>
+     </table>
    </body>
 
 </html>
