@@ -24,6 +24,10 @@ In a browser:
 
 ![picture of alarm main window](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/pictures/alarm_main_window.jpg?raw=true)
 
+Native application:
+
+![picture of alarm main window](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/pictures/alarm_main_window_native.jpg?raw=true)
+
 On a phone:
 
 ![picture of alarm main window on phone](https://raw.githubusercontent.com/mhdawson/micro-app-home-alarm/master/pictures/alarm_main_window_phone.jpg?raw=true)
