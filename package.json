@@ -1,6 +1,6 @@
 {
   "name": "micro-app-home-alarm",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Alarm dashboard written in node",
   "main": "lib/server.js",
   "scripts": {
