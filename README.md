@@ -133,7 +133,7 @@ in the configuration section above.
 
 # Running
 
-Simply cd to the directory where the npm was install and type:
+Simply cd to the directory where the npm was installed and type:
 
 <PRE>
 npm start
