@@ -62,7 +62,7 @@ following configuration options:
 
 * title - title used to name the page for the app
 * alarmSite - Name assigned to this instance of the alarm
-* serverPort - port on which alarm GUI is server
+* serverPort - port on which micro-app is listening for connections
 * tls - set to the string "true" if you want to force tls when connecting
 * authenticate - set to "true" to enable basic authentication. If set
   to true then you must provide the "authInfo" values described below
