@@ -1,6 +1,6 @@
 {
   "name": "micro-app-home-alarm",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "Alarm dashboard written in node",
   "main": "lib/server.js",
   "scripts": {
@@ -9,9 +9,9 @@
   },
   "dependencies": {
     "micro-app-framework": "^0.1.1",
+    "micro-app-notify-client": "^0.0.1",
     "socket.io": "~1.3.7",
-    "mqtt": "~1.6.3",
-    "twilio": "^2.2.0"
+    "mqtt": "~1.6.3"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,6 @@
     "micro-app",
     "sensor",
     "alarm",
-    "twillio",
     "sms",
     "webcam"
   ],
