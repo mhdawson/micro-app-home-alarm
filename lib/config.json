@@ -16,13 +16,14 @@
              { "topic": "house/2262/4", "zoneId": 1, "label": "motion hall" },
              { "topic": "house/2262/5", "zoneId": 5, "label": "fire" }
            ],
-  "twilio": { "accountSID": "XXXXXXXXXXXXXXXXXXXXXXX",
-              "accountAuthToken": "XXXXXXXXXXXXXXXXXXXX",
-              "fromNumber": "XXXXXXXXXX",
-              "toNumber": "XXXXXXXXXXX" },
   "camera": { "topic": "house/camera",
               "IRtopic": "home/2272",
               "IRon": "FFFFFFF11000",
               "IRoff": "FFFFFFF10000" },
-  "eventLogPrefix": "/home/user1/repos/micro-app-home-alarm"
+  "eventLogPrefix": "/home/user1/repos/micro-app-home-alarm",
+  "notify": {
+    "mqttSmsBridge": { "enabled": true,
+                       "serverUrl": "your mqtt server",
+                       "topic": "house/sms" }
+  }
 }
