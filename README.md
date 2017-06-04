@@ -81,13 +81,33 @@ following configuration options:
   etc. needed to connect to the mqtt server using tls)
 * zone - array objects, each of which specifies the topic, zoneId and label
   for one of the alarm zones
-* twilio - object specifying the accountSID, accountAuthToken, fromNumber 
-  and toNumber that will be used to send SMS notifications
 * camera - object with topic used to communicate with the camera server
   and topics and messages used to communicate with an IR illuminator (see
   https://github.com/mhdawson/PI433WirelessTXManager for the circuit
   used to turn on/off the power supply for the IR illuminator)
 * eventLogPrefix - directory in which log for alarm will be written
+* notify - configuration for notification options
+  * mqttSmsBridge - element with the following sub-elements:
+    * enabled - set to true if you want notifications to
+      be sent using this provider.
+    * serverUrl - url for the mqtt server to which the
+      bridge is connected.
+    * topic - topic on which the bridge listens for
+      notification requests.
+    * certs - directory which contains the keys/certs
+      required to connect to the mqtt server if the
+      url is of type `mqtts`.
+  * voipms - element with the following sub-elements:
+    * enabled - set to true if you want notifications to
+      be sent using this provider.
+    * user - voip.ms API userid.
+    * password - voip.ms API password.
+    * did - voip.ms did(number) from which the SMS will be sent.
+    * dst - number to which the SMS will be sent.
+  * twilio - element with the following sub-elements:
+    * enabled - set to true if you want notifications to
+      be sent using this provider.
+
 
 For example this is my configuration file with some key elements
 masked out:
@@ -111,15 +131,16 @@ masked out:
              { "topic": "house/2262/4", "zoneId": 1, "label": "motion hall" },
              { "topic": "house/2262/5", "zoneId": 5, "label": "fire" }
            ],
-  "twilio": { "accountSID": "XXXXXXXXXXXXXXXXXXXXXXX",
-              "accountAuthToken": "XXXXXXXXXXXXXXXXXXXX",
-              "fromNumber": "XXXXXXXXXX",
-              "toNumber": "XXXXXXXXXXX" },
   "camera": { "topic": "house/camera",
               "IRtopic": "home/2272",
               "IRon": "FFFFFFF11000",
               "IRoff": "FFFFFFF10000" },
-  "eventLogPrefix": "/home/user1/repos/micro-app-home-alarm"
+  "eventLogPrefix": "/home/user1/repos/micro-app-home-alarm",
+  "notify": {
+    "mqttSmsBridge": { "enabled": true,
+                       "serverUrl": "your mqtt server",
+                       "topic": "house/sms" }
+  }
 }
 </PRE>
 
@@ -142,6 +163,23 @@ Simply cd to the directory where the npm was installed and type:
 npm start
 </PRE>
 
+# Key Depdencies
+
+## micro-app-framework
+As a micro-app the micro-app-alert-dashboard app depends on the micro-app-framework:
+
+* [micro-app-framework npm](https://www.npmjs.com/package/micro-app-framework)
+* [micro-app-framework github](https://github.com/mhdawson/micro-app-framework)
+
+See the documentation on the micro-app-framework for more information on general
+configurtion options that are availble (ex using tls, authentication, serverPort, etc)
+
+## micro-app-notify-client
+
+* [micro-app-notify-client](https://github.com/mhdawson/micro-app-notify-client)
+
+The micro-app-notify-client is used to send notifications through sms and other
+means when necessary.
+
 ## TODOs
 - Add more doc on how to configure, setup and run, including the required mqtt server
-
