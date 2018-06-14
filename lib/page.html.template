@@ -206,6 +206,8 @@ license that can be found in the LICENSE file.
          }
       }
 
+      var MAX_PICTURE_WAIT = 60;
+      var intervalCount = 0;
       var pictureInFlight = undefined;
       var pictureInFlightState = 0;
       function stopPictureInFlightIndicator() {
@@ -214,6 +216,7 @@ license that can be found in the LICENSE file.
          indicator.innerHTML="picture";
          if (pictureInFlight !== undefined) {
             clearInterval(pictureInFlight);
+            intervalCount = 0;
          }
       }
 
@@ -227,6 +230,10 @@ license that can be found in the LICENSE file.
             } else {
                pictureInFlightState = 0;
                indicator.innerHTML="picture";
+            }
+            intervalCount++;
+            if (intervalCount > MAX_PICTURE_WAIT) {
+               stopPictureInFlightIndicator();
             }
          },1000);
       }
